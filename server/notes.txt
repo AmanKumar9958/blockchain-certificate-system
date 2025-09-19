@@ -1,0 +1,6 @@
+Installed packages:
+Express: Server banane ke liye.
+cors: Frontend aur backend ke beech communication ke liye.
+mongoose: MongoDB se connect hone ke liye.
+dotenv:Environment variables (jaise ki database URL) manage karne ke liye.
+web3: Sabse important package. Yeh Node.js ko Ethereum blockchain ke saath interact karne mein madad karega.
