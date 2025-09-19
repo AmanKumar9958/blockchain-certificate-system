@@ -9,7 +9,7 @@ const contract = new web3.eth.Contract(ABI, contractAddress);
 
 const addCertificate = async (hash) => {
     // Yahan hum private key ka use karke transaction send karenge.
-    const privateKey = 'YOUR_UNIVERSITY_ACCOUNT_PRIVATE_KEY';
+    const privateKey = '0x2f51ab0f5da360b31521f6a4d45389af1ba85595795c830668c58bb4e5d25e12';
     const account = web3.eth.accounts.privateKeyToAccount(privateKey);
     web3.eth.accounts.wallet.add(account);
 

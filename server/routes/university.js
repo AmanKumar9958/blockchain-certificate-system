@@ -18,11 +18,10 @@ router.post('/upload', async (req, res) => {
 
         // Step 4: MongoDB mein record save karein
         const newCertificate = new Certificate({
-            certificateId,
+            certificateId: certificateId.toString(), // Convert bigint to string
             studentName,
             studentID,
             certificateHash,
-            // Certificate data ko file system ya cloud storage par save kar sakte hain
         });
         await newCertificate.save();
 
