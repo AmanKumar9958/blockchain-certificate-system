@@ -4,6 +4,7 @@ import axios from 'axios';
 const UniversityDashboard = () => {
     const [studentName, setStudentName] = useState('');
     const [studentId, setStudentId] = useState('');
+    const [courseName, setCourseName] = useState(''); // <--- Naya state variable
     const [certificateId, setCertificateId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -14,13 +15,12 @@ const UniversityDashboard = () => {
         setError('');
 
         try {
-            // Dhyan dein: Yahan hum ek dummy certificate data bhej rahe hain.
-            // Real project mein, aap ek file upload system banayenge.
-            const certificateData = `Certificate for ${studentName} - ID: ${studentId}`;
+            const certificateData = `Certificate for ${studentName} - ID: ${studentId} - Course: ${courseName}`;
 
             const response = await axios.post('http://localhost:5000/api/university/upload', {
                 studentName,
-                studentID: studentId, // Backend ke field name se match karein
+                studentID: studentId,
+                courseName, // <--- Naya data yahan add hoga
                 certificateData,
             });
 
@@ -28,7 +28,11 @@ const UniversityDashboard = () => {
             alert(`Certificate uploaded successfully! ID: ${response.data.certificateId}`);
         } catch (err) {
             console.error(err);
-            setError('Failed to upload certificate. Please try again.');
+            if (err.response && err.response.status === 409) {
+                setError(err.response.data.message);
+            } else {
+                setError('Failed to upload certificate. Please try again.');
+            }
         } finally {
             setLoading(false);
         }
@@ -57,6 +61,16 @@ const UniversityDashboard = () => {
                         required
                     />
                 </div>
+                {/* Naya input field yahan hai */}
+                <div style={{ marginBottom: '10px' }}>
+                    <label>Course Name:</label>
+                    <input
+                        type="text"
+                        value={courseName}
+                        onChange={(e) => setCourseName(e.target.value)}
+                        required
+                    />
+                </div>
                 <button type="submit" disabled={loading}>
                     {loading ? 'Uploading...' : 'Upload Certificate'}
                 </button>
@@ -70,7 +84,7 @@ const UniversityDashboard = () => {
                     <p>
                         **Certificate ID:** {certificateId}
                         <br />
-                        This ID and its corresponding QR code can now be shared with the student.
+                        This ID can now be shared with the student.
                     </p>
                 </div>
             )}

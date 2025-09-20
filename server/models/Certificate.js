@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const CertificateSchema = new Schema({
     certificateId: {
-        type: Number,
+        type: String, // <--- Number se String karein
         required: true,
         unique: true
     },
@@ -12,6 +12,11 @@ const CertificateSchema = new Schema({
         required: true
     },
     studentID: {
+        type: String,
+        required: true
+    },
+    // Nayi field yahan add karein
+    courseName: {
         type: String,
         required: true
     },

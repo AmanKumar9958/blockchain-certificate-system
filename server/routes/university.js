@@ -8,7 +8,13 @@ const Certificate = require('../models/Certificate'); // Abhi aage banayenge
 router.post('/upload', async (req, res) => {
     try {
         // Step 1: Frontend se student details aur file aayengi
-        const { studentName, studentID, certificateData } = req.body;
+        const { studentName, studentID, courseName, certificateData } = req.body;
+
+        // --- Update kiya hua Duplicate Check ---
+        const existingCertificate = await Certificate.findOne({ studentID, courseName });
+        if (existingCertificate) {
+            return res.status(409).json({ message: "Certificate for this student and course already exists. Cannot issue a duplicate." });
+        }
 
         // Step 2: Hashing (Ek dummy hash banate hain abhi ke liye)
         const certificateHash = '0x' + require('crypto').createHash('sha256').update(JSON.stringify(req.body)).digest('hex');
@@ -18,9 +24,10 @@ router.post('/upload', async (req, res) => {
 
         // Step 4: MongoDB mein record save karein
         const newCertificate = new Certificate({
-            certificateId: certificateId.toString(), // Convert bigint to string
+            certificateId,
             studentName,
             studentID,
+            courseName, // Nayi field yahan add karein
             certificateHash,
         });
         await newCertificate.save();
