@@ -1,15 +1,14 @@
 const { Web3 } = require('web3');
-const ABI = require('../abi/CertificateVerification.json'); // Aage banayenge
-const contractAddress = "0x3c4734935B89717aD5D03ec2cD6E165BA45ac90e"; // Remix se copy kiya hua address
+const ABI = require('../abi/CertificateVerification.json'); 
+const contractAddress = "0x7AbCCdd71EC2B1F1b6dA63E18b53944f4cA88276"; // Remix deployed contract
 
-// Connect to Ethereum node (e.g., Infura, Alchemy, or Ganache)
+// Connect to Ethereum node
 const web3 = new Web3(new Web3.providers.HttpProvider('https://eth-sepolia.g.alchemy.com/v2/orUaSOAo_T9X5VRjUTQWc'));
 
 const contract = new web3.eth.Contract(ABI, contractAddress);
 
 const addCertificate = async (hash) => {
-    // Yahan hum private key ka use karke transaction send karenge.
-    const privateKey = '0x2f51ab0f5da360b31521f6a4d45389af1ba85595795c830668c58bb4e5d25e12';
+    const privateKey = process.env.PRIVATE_KEY; // 🚨 Private key .env file se lein
     const account = web3.eth.accounts.privateKeyToAccount(privateKey);
     web3.eth.accounts.wallet.add(account);
 
@@ -19,11 +18,14 @@ const addCertificate = async (hash) => {
             gas: 2000000,
         });
         
-        // Return value se certificateId lein
-        const certificateId = result.blockNumber; // A simple ID based on block number
+        // ✅ Event se certificateId nikaalne ka sahi tareeka
+        const certificateId = result.events.CertificateAdded.returnValues.certificateId;
 
-        console.log(`Certificate added with ID: ${certificateId}`);
-        return certificateId;
+        // ID ko string mein convert karein
+        const idString = certificateId.toString(); 
+
+        console.log(`Certificate added with correct ID: ${idString}`);
+        return idString; // Sahi ID return karein
 
     } catch (error) {
         console.error("Error adding certificate:", error);

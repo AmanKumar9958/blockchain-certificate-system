@@ -1,10 +1,10 @@
 // server.js
-
 // 1. Saare zaroori modules import karein
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const crypto = require('crypto'); // Hashing ke liye
 
 // blockchain aur database models
 const { addCertificate, getCertificateHash } = require('./utils/blockchain');
@@ -30,18 +30,27 @@ app.get('/', (req, res) => {
 // --- UNIVERSITY ROUTE (Upload) ---
 app.post('/api/university/upload', async (req, res) => {
     try {
-        const { studentName, studentID, courseName, certificateData } = req.body;
+        // Sirf core data ko body se lein
+        const { studentName, studentID, courseName } = req.body;
 
         const existingCertificate = await Certificate.findOne({ studentID, courseName });
         if (existingCertificate) {
             return res.status(409).json({ message: "Certificate for this student and course already exists. Cannot issue a duplicate." });
         }
+        
+        // Final hashing: sirf core data ka hash banayein
+        const certificateDataToHash = {
+            studentName,
+            studentID,
+            courseName,
+        };
 
-        const certificateHash = '0x' + require('crypto').createHash('sha256').update(JSON.stringify(req.body)).digest('hex');
+        const certificateHash = '0x' + crypto.createHash('sha256').update(JSON.stringify(certificateDataToHash)).digest('hex');
+        
         const certificateId = await addCertificate(certificateHash);
 
         const newCertificate = new Certificate({
-            certificateId,
+            certificateId: certificateId.toString(),
             studentName,
             studentID,
             courseName,
@@ -70,10 +79,12 @@ app.post('/api/verify', async (req, res) => {
         if (!certificateRecord) {
             return res.status(404).json({ message: "Certificate not found." });
         }
+        
+        const blockchainHashRaw = await getCertificateHash(parseInt(certificateId));
+        const providedHashRaw = certificateRecord.certificateHash;
 
-        const blockchainHash = await getCertificateHash(certificateId);
-
-        const providedHash = certificateRecord.certificateHash;
+        const blockchainHash = '0x' + blockchainHashRaw.substring(2).padStart(64, '0');
+        const providedHash = '0x' + providedHashRaw.substring(2).padStart(64, '0');
 
         if (blockchainHash.trim().toLowerCase() === providedHash.trim().toLowerCase()) {
             res.status(200).json({
