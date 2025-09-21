@@ -1,1 +1,21 @@
 @import "tailwindcss";
+
+/* Global UX: show pointer cursor when hovering actionable buttons */
+button:not(:disabled):hover,
+input[type="button"]:not(:disabled):hover,
+input[type="submit"]:not(:disabled):hover,
+input[type="reset"]:not(:disabled):hover {
+	cursor: pointer;
+}
+
+/* Prevent accidental horizontal scroll due to wide glow effects */
+body {
+	overflow-x: hidden;
+}
+
+/* Desktop sizing: scale down base font size so 100% zoom looks like ~90% */
+@media (min-width: 1024px) {
+	html {
+		font-size: 90%; /* ~14.4px base, affects rem-based Tailwind sizes */
+	}
+}

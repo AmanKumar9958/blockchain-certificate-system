@@ -1,58 +1,70 @@
-import React from 'react'
-import { useState } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 const Hero = () => {
-    const [showImage, setShowImage] = useState(true);
+    const [ref, isVisible] = useScrollAnimation();
+    
     return (
-        <section className="relative w-[92%] max-w-[1200px] mx-auto py-12 md:py-20">
-            {/* Accent background glows */}
+        <section ref={ref} className={`relative w-[92%] max-w-[1200px] mx-auto py-20 md:py-28 transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            {/* Background Glows and Grids */}
             <div aria-hidden className="pointer-events-none absolute -z-10 inset-0">
-                <div className="absolute -top-24 -left-24 w-[420px] h-[420px] rounded-full bg-neon-purple/15 blur-3xl" />
-                <div className="absolute top-10 right-0 w-[420px] h-[420px] rounded-full bg-neon-blue/10 blur-3xl" />
+                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_rgba(45,212,191,0.1)_0%,_transparent_50%)]" />
+                <div className="absolute -top-40 -left-60 w-[500px] h-[500px] rounded-full bg-cyan-500/10 blur-3xl" />
+                <div className="absolute -bottom-40 -right-60 w-[500px] h-[500px] rounded-full bg-blue-500/10 blur-3xl" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 {/* Left: Headline & CTAs */}
-                <div>
-                    <h1 className="font-display font-extrabold leading-tight text-4xl md:text-6xl">
-                        Verify & Upload <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-100 to-cyan-300 drop-shadow-[0_0_22px_rgba(56,189,248,.45)]">Certificates</span> on the <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-100 to-cyan-300 drop-shadow-[0_0_22px_rgba(56,189,248,.45)]">Blockchain</span>
-                        <br />
+                <div className="text-center lg:text-left">
+                    <h1 className="font-extrabold text-4xl md:text-6xl tracking-tighter">
+                        Secure & Verify Certificates on the
+                        <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-500">
+                            Blockchain
+                        </span>
                     </h1>
-                    <p className="text-slate-300/80 text-base md:text-lg max-w-[560px] mt-4">
-                        Revolutionizing certificate verification with transparency, security, and efficiency.
+                    <p className="text-slate-400 text-base md:text-lg max-w-xl mx-auto lg:mx-0 mt-6">
+                        Revolutionizing academic and professional credentials with unparalleled transparency, security, and efficiency.
                     </p>
+                    <div className="mt-8 flex justify-center lg:justify-start gap-4">
+                            <Link to="/verify" className="inline-block px-8 py-3 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-bold shadow-lg shadow-cyan-500/30 transform hover:scale-105 transition-transform">
+                                Verify Certificate
+                            </Link>
+                            <Link to="/university" className="inline-block px-8 py-3 rounded-full bg-slate-700/50 text-white font-semibold transform hover:bg-slate-700 hover:scale-105 transition-all">
+                                University Login
+                            </Link>
+                    </div>
                 </div>
 
                 {/* Right: Illustration */}
                 <div className="relative">
-                    {showImage && (
-                        <img
-                            src="/bg_image_1.jpg"
-                            alt="Blockchain illustration"
-                            className="w-full h-auto rounded-xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.35)]"
-                            onError={() => setShowImage(false)}
-                        />
-                    )}
-
-                    {/* Fallback neon illustration if image missing */}
-                    {!showImage && (
-                        <div className="relative overflow-hidden rounded-xl border border-neon-purple/30 bg-white/5 backdrop-blur-md p-6 aspect-[16/10]">
-                            {/* chain link */}
-                            <svg viewBox="0 0 512 512" className="absolute -top-10 right-2 w-60 text-neon-blue/70">
-                                <path fill="currentColor" d="M326.6 185.4c-12.5-12.5-12.5-32.8 0-45.3l56-56c37.5-37.5 98.3-37.5 135.8 0s37.5 98.3 0 135.8l-56 56c-37.5 37.5-98.3 37.5-135.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c12.5 12.5 32.8 12.5 45.3 0l56-56c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-56 56c-12.5 12.5-32.8 12.5-45.3 0zM185.4 326.6c12.5 12.5 12.5 32.8 0 45.3l-56 56c-37.5 37.5-98.3 37.5-135.8 0s-37.5-98.3 0-135.8l56-56c37.5-37.5 98.3-37.5 135.8 0c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0c-12.5-12.5-32.8-12.5-45.3 0l-56 56c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l56-56c12.5-12.5 32.8-12.5 45.3 0zM187.3 324.7c-12.5-12.5-12.5-32.8 0-45.3l137.9-137.9c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3L232.7 324.7c-12.5 12.5-32.8 12.5-45.3 0z"/>
-                            </svg>
-                            {/* hand-like blob */}
-                            <div className="absolute -bottom-6 left-0 w-[420px] h-[220px] bg-gradient-to-r from-neon-blue/20 to-neon-purple/20 blur-2xl rounded-[100px] rotate-[-8deg]" />
-                            {/* particles */}
-                            <div className="absolute top-6 right-10 w-2 h-2 bg-neon-blue rounded-full blur-[1px] animate-pulse" />
-                            <div className="absolute top-16 right-24 w-1.5 h-1.5 bg-neon-purple rounded-full blur-[1px] animate-pulse" />
-                            <div className="absolute top-8 right-40 w-1 h-1 bg-white/70 rounded-full animate-pulse" />
+                    <div className="relative aspect-square p-6 rounded-2xl bg-slate-800/50 border border-slate-700/50 shadow-2xl shadow-slate-900/50">
+                        <div className="absolute inset-0 animate-[spin_20s_linear_infinite]">
+                            <div className="absolute top-0 left-1/2 w-16 h-16 bg-cyan-400/50 rounded-full blur-xl"></div>
                         </div>
-                    )}
+                            <div className="absolute inset-0 animate-[spin_30s_linear_infinite_reverse]">
+                            <div className="absolute bottom-1/4 right-0 w-24 h-24 bg-blue-500/50 rounded-full blur-2xl"></div>
+                        </div>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <svg viewBox="0 0 24 24" className="w-40 h-40 text-slate-600/50 opacity-50">
+                                <path fill="currentColor" d="M12 22S3 17 3 10V5l9-3 9 3v5c0 7-9 7-9 7Z"/>
+                            </svg>
+                        </div>
+                        <div className="relative z-10 w-full h-full flex flex-col items-center justify-center text-center bg-slate-900/30 backdrop-blur-md rounded-xl border border-slate-700">
+                            <h3 className="text-2xl font-bold bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent">Immutable Ledger</h3>
+                            <p className="text-slate-400 mt-2 text-sm max-w-xs">
+                                Every certificate is cryptographically signed and recorded forever.
+                            </p>
+                            <div className="mt-4 text-green-400 font-mono text-xs flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                                System Operational
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
-    )
-}
+    );
+};
 
-export default Hero
+export default Hero;

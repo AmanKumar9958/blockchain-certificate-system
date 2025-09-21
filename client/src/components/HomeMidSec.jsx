@@ -1,72 +1,52 @@
-import React from 'react'
+import React from 'react';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
+
+// --- SVG Icons (for a consistent look) ---
+const Icons = {
+    Decentralization: ( <svg viewBox="0 0 24 24" className="w-8 h-8 text-cyan-300"><path fill="currentColor" d="M4.22 13.82a.75.75 0 0 1-.5-1.32L11.5 6.22a.75.75 0 0 1 1 0l7.78 6.28a.75.75 0 0 1-.5 1.32H4.22ZM12 8.31 6.35 12.32H17.65L12 8.31ZM4 18.25a.75.75 0 0 1-.75-.75v-2a.75.75 0 0 1 1.5 0v2c0 .41-.34.75-.75.75Zm8 0a.75.75 0 0 1-.75-.75v-4a.75.75 0 0 1 1.5 0v4c0 .41-.34.75-.75.75Zm8 0a.75.75 0 0 1-.75-.75v-3a.75.75 0 0 1 1.5 0v3c0 .41-.34.75-.75.75Z"/></svg> ),
+    Security: ( <svg viewBox="0 0 24 24" className="w-8 h-8 text-cyan-300"><path fill="currentColor" d="M12 22S3 17 3 10V5l9-3 9 3v5c0 7-9 7-9 7Zm0-2.5c4.78 0 7-3.32 7-5.5V6.62l-7-2.33l-7 2.33v3.26c0 2.18 2.22 5.5 7 5.5Z"/></svg> ),
+    Transparency: ( <svg viewBox="0 0 24 24" className="w-8 h-8 text-cyan-300"><path fill="currentColor" d="m21.92 20.5-4.94-4.94A8.5 8.5 0 1 0 10.5 19a8.46 8.46 0 0 0 5.06-1.58l4.94 4.94a.75.75 0 1 0 1.06-1.06ZM10.5 17.5a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z"/></svg> ),
+    Efficiency: ( <svg viewBox="0 0 24 24" className="w-8 h-8 text-cyan-300"><path fill="currentColor" d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm0 18.5a8.5 8.5 0 1 1 8.5-8.5a8.51 8.51 0 0 1-8.5 8.5Zm.75-12.25v5a.75.75 0 0 1-1.5 0V9.5a.75.75 0 0 1 .75-.75c.41 0 .75.34.75.75Zm4.16 4.16L13.5 14.59v-4.1a.75.75 0 0 1 1.5 0v5a.74.74 0 0 1-.53.71a.75.75 0 0 1-.8-.21l-4-4a.75.75 0 1 1 1.06-1.06Z"/></svg> )
+};
 
 const features = [
-    {
-        title: 'Decentralization',
-        desc: 'No single entity controls the system.',
-        icon: (
-            <svg viewBox="0 0 24 24" className="w-6 h-6 text-neon-blue">
-                <path fill="currentColor" d="M12 2 3 7v10l9 5 9-5V7l-9-5Zm0 2.15L19 7.1v.05L12 11 5 7.15V7.1l7-2.95Zm-7 5.2 7 3.85 7-3.85V16l-7 3.9L5 16V9.35Z"/>
-            </svg>
-        ),
-    },
-    {
-        title: 'Security',
-        desc: 'Encrypted and tamper-proof data.',
-        icon: (
-            <svg viewBox="0 0 24 24" className="w-6 h-6 text-neon-blue">
-                <path fill="currentColor" d="M12 1 4 4v6c0 5 3.4 9.74 8 11 4.6-1.26 8-6 8-11V4l-8-3Zm0 4.18 5 1.88V10c0 3.47-2.17 6.86-5 8.11C9.17 16.86 7 13.47 7 10V7.06l5-1.88ZM9.5 11A2.5 2.5 0 0 1 12 8.5 2.5 2.5 0 0 1 14.5 11v1h.5a1 1 0 0 1 1 1v2.5h-8V13a1 1 0 0 1 1-1h.5v-1Z"/>
-            </svg>
-        ),
-    },
-    {
-        title: 'Transparency',
-        desc: 'Public, accountable transactions.',
-        icon: (
-            <svg viewBox="0 0 24 24" className="w-6 h-6 text-neon-blue">
-                <path fill="currentColor" d="M10 2a8 8 0 1 0 5.29 14l4.71 4.7 1.41-1.4-4.7-4.71A8 8 0 0 0 10 2Zm0 2a6 6 0 1 1 0 12A6 6 0 0 1 10 4Z"/>
-            </svg>
-        ),
-    },
-    {
-        title: 'Efficiency',
-        desc: 'Faster, cost‑effective processes.',
-        icon: (
-            <svg viewBox="0 0 24 24" className="w-6 h-6 text-neon-blue">
-                <path fill="currentColor" d="M12 2a10 10 0 1 0 10 10h-2A8 8 0 1 1 12 4V2Zm1 3v7h6v-2h-4V5h-2Z"/>
-            </svg>
-        ),
-    },
-]
+    { title: 'Decentralization', desc: 'No single entity controls the system, ensuring fair and unbiased verification.', icon: Icons.Decentralization },
+    { title: 'Cryptographic Security', desc: 'Each certificate is hashed and tamper-proof, making forgery impossible.', icon: Icons.Security },
+    { title: 'Absolute Transparency', desc: 'All transactions are public, building unparalleled trust and accountability.', icon: Icons.Transparency },
+    { title: 'Unmatched Efficiency', desc: 'Verify credentials in seconds, not weeks, saving time and resources.', icon: Icons.Efficiency },
+];
 
 const HomeMidSec = () => {
+    const [ref, isVisible] = useScrollAnimation();
+
     return (
-        <section className="w-[92%] max-w-[1200px] mx-auto py-10 md:py-14">
+        <section ref={ref} className={`w-[92%] max-w-[1200px] mx-auto py-20 md:py-28 transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="text-center">
-                <h2 className="font-display font-extrabold text-3xl md:text-4xl">
-                    Why <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-100 to-cyan-300">BlockCert?</span>
+                <h2 className="font-extrabold text-3xl md:text-4xl tracking-tighter">
+                    The Foundation of Modern Trust
                 </h2>
-                <p className="text-slate-300/80 max-w-[720px] mx-auto mt-3">
-                    A decentralized approach to certificate verification, ensuring authenticity and trust.
+                <p className="text-slate-400 max-w-2xl mx-auto mt-4">
+                    BlockCert is built on core principles that guarantee the integrity of every certificate issued on our platform.
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mt-8">
-                {features.map((f) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+                {features.map((f, index) => (
                     <div
                         key={f.title}
-                        className="relative bg-white/5 backdrop-blur-md border border-white/10 hover:border-neon-blue/40 rounded-2xl p-5 md:p-6 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition hover:bg-cyan-900 hover:scale-105"
+                        className={`bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-lg transform transition-all duration-500 hover:scale-105 hover:border-cyan-400/50 hover:shadow-cyan-500/10`}
+                        style={{ transitionDelay: `${index * 100}ms` }}
                     >
-                        <div className="mb-4 inline-flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-neon-blue/15 to-neon-purple/10 ring-1 ring-inset ring-neon-blue/30 shadow-neon-blue">
+                        <div className="mb-4 inline-flex items-center justify-center w-14 h-14 rounded-xl bg-slate-900 border border-slate-700">
                             {f.icon}
                         </div>
-                        <h3 className="text-lg font-semibold">{f.title}</h3>
-                        <p className="text-slate-300/80 text-sm mt-1">{f.desc}</p>
+                        <h3 className="text-lg font-bold text-slate-100">{f.title}</h3>
+                        <p className="text-slate-400 text-sm mt-1">{f.desc}</p>
                     </div>
                 ))}
             </div>
         </section>
-    )
-}
+    );
+};
 
-export default HomeMidSec
+export default HomeMidSec;
