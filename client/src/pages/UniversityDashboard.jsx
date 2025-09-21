@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import { post } from '../lib/api';
 
 // --- SVG Icons ---
 const CheckIcon = ({ className }) => (
@@ -33,7 +33,7 @@ const UniversityDashboard = () => {
         try {
             // NOTE: 'certificateData' was being sent but not used in the backend. 
             // It's good practice to only send the data that is required.
-            const response = await axios.post('http://localhost:5000/api/university/upload', {
+            const response = await post('/api/university/upload', {
                 studentName,
                 studentID: studentId,
                 courseName,

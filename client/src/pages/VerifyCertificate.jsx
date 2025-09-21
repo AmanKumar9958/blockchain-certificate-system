@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { post } from '../lib/api';
 
 // --- SVG Icons for different states ---
 const DocumentSearchIcon = ({ className }) => (
@@ -32,7 +32,7 @@ const VerifyCertificate = () => {
         setVerificationResult(null); // Reset previous result
 
         try {
-            const res = await axios.post('http://localhost:5000/api/verify', { certificateId });
+            const res = await post('/api/verify', { certificateId });
             setVerificationResult(res.data);
         } catch (error) {
             console.error("Verification failed:", error);
