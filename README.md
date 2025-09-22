@@ -1,87 +1,102 @@
-Project Title 📜 Blockchain-Based Certificate System
+# 📜 Blockchain-Based Certificate System
 
-Description 📝 This project, titled "Online Blockchain-Based Certificate
-Generation and Validation," aims to revolutionize the traditional method
-of certificate issuance and verification by leveraging blockchain
-technology. Our solution enhances security, reduces fraud, and
-simplifies the validation process for educational and professional
-certificates.
+An intelligent solution to revolutionize the traditional method of certificate issuance and verification by leveraging blockchain technology. Our platform enhances security, reduces fraud, and simplifies the validation process for educational and professional certificates.
 
-Features ✨ Secure Certificate Storage: Certificates are stored on the
-Ethereum blockchain, ensuring immutability and security.
+**Live Demo:** [Blockchain-Based Certificate System](https://blockcert.codewithaman.tech/)
 
-Tamper-Proof: The immutability of the blockchain makes certificates
-tamper-proof.
+---
 
-Smart Contracts: Automate the issuance process, ensuring certificates
-are issued only when criteria are met.
+## ✨ Features
 
-Unique Identifiers: Each certificate is associated with a unique hash
-and can be easily verified using a URL or QR code.
+* **🔐 Secure Certificate Storage**: Certificates are stored on the Ethereum blockchain, ensuring immutability and top-tier security.
+* **🛡️ Tamper-Proof**: The inherent immutability of the blockchain makes every certificate completely tamper-proof.
+* **🤖 Smart Contracts**: Automates the issuance process, ensuring certificates are generated only when specific criteria are met.
+* **🔑 Unique Identifiers**: Each certificate is linked to a unique hash and can be instantly verified using a URL or QR code.
+* **✅ Efficient Verification**: Allows organizations to verify certificates quickly and reliably through our platform.
 
-Efficient Verification: Organizations can verify certificates quickly
-and reliably using our platform.
+---
 
-Technologies Used ⚙️ Frontend: \[List frontend technologies, e.g.,
-React, HTML, CSS, JavaScript\]
+## ⚙️ Tech Stack
 
-Backend: \[List backend technologies, e.g., Node.js, Flask, Python\]
+* **Frontend**: React and Tailwind
+* **Backend**: Node.js, Express and MongoDB
+* **Blockchain**: Ethereum, Solidity
+* **Development Tools**: MetaMask
 
-Blockchain: \[List blockchain technologies, e.g., Ethereum, Solidity\]
+---
 
-Development Tools: \[List development tools, e.g., Truffle, Hardhat,
-MetaMask\]
+## 🚀 Installation and Setup
 
-Installation and Setup 🚀 To get a local copy up and running, follow
-these simple steps.
+To get a local copy up and running, follow these simple steps.
 
-Clone the repository:
+### 1. Clone the repository:
+```bash
+git clone [https://github.com/AmanKumar9958/blockchain-certificate-system.git](https://github.com/AmanKumar9958/blockchain-certificate-system.git)
 
-Bash
+```
+### 2. Navigate into the project folder
+```bash
+cd blockchain-certificate-system
+```
 
-git clone
-https://github.com/AmanKumar9958/blockchain-certificate-system.git
-Install dependencies:
+### 3. Navigate to client folder and install required packages
+```bash
+npm install
+```
 
-Bash
+### 4. Navigate to server folder and install required packages
+```bash
+npm install
+```
 
-Navigate into the project folder cd blockchain-certificate-system
+## 🔗 Blockchain Setup
 
-Install the required packages npm install Set up the blockchain
-environment:
+### Install Metamask
+Install the Metamask wallet extension and create an account on it and connect it with *Sepolia Test Network*.
 
-\[Provide instructions on how to set up the local blockchain, e.g.,
-using Ganache or a test network like Sepolia.\]
+### Get Sepolia ETH
+You will need some ETH in your wallet for gas fees. Search Google for 'Sepolia Faucet' and claim free ETH to your MetaMask address from any website.
 
-\[Provide instructions on how to deploy the smart contracts.\]
+### Create a Web3 Provider Account
+We have used Alchemy for this project. Create a free account on Alchemy and generate an API key for the Sepolia network.
 
-Configure the environment variables:
+### Update Configuration
+Open the server/utils/blockchain.js file in your backend. Update the configuration by adding your Alchemy API key and the private key of your MetaMask account.
 
-\[Explain what .env file variables are needed, such as private keys, API
-keys, etc.\]
+## 📄 Smart Contract Deployment
 
-Usage 💻 \[Provide clear and concise instructions on how to run your
-application. Include commands, screenshots, or any other helpful
-information.\]
+## Open Remix IDE
+Open https://remix.ethereum.org/ in your browser.
 
-Contributing ❤️ Contributions are what make the open-source community
-such an amazing place to learn, inspire, and create. Any contributions
-you make are greatly appreciated.
+### Create Smart Contract File
+In the contracts folder, create a new file named CertificateVerification.sol and paste this code into it.
 
-Fork the project.
+```bash
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
 
-Create your feature branch (git checkout -b feature/AmazingFeature).
+contract CertificateVerification {
+    mapping(bytes32 => bool) private certificates;
 
-Commit your changes (git commit -m 'feat: Add some AmazingFeature').
+    function addCertificate(bytes32 _certificateHash) public {
+        require(_certificateHash != 0, "Hash cannot be zero.");
+        certificates[_certificateHash] = true;
+    }
 
-Push to the branch (git push origin feature/AmazingFeature).
+    function verifyCertificate(bytes32 _certificateHash) public view returns (bool) {
+        return certificates[_certificateHash];
+    }
+}
+```
 
-Open a pull request.
+### Compile
+In the left panel, click on the Solidity compiler icon (🚀) and compile the contract. Make sure the version is 0.8.20 or higher.
 
-License 📜 Distributed under the \[License Name\] License. See LICENSE
-for more information.
+### Deploy
+Go to the "Deploy & Run Transactions" icon, select "Injected Provider – MetaMask", and connect your MetaMask account. Click the Deploy button and confirm the transaction in MetaMask.
 
-Contact 📧 \[Your Name\] - \[Your Email\]
+### Copy Address and ABI
+After deployment, copy the contract address from the "Deployed Contracts" section. From the ABI tab, copy the entire JSON code and paste it into your backend at server/abi/CertificateVerification.json.
 
-Project Link:
-https://github.com/AmanKumar9958/blockchain-certificate-system
+### Final Configuration
+In your server/utils/blockchain.js file, update the contractAddress with the new address.
