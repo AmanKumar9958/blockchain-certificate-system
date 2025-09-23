@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { api } from '../lib/api';
 
 // --- SVG Icons ---
 const CheckIcon = ({ className }) => ( <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg> );
@@ -24,7 +24,7 @@ const UniversityDashboard = () => {
         setIsCopied(false);
 
         try {
-            const response = await axios.post('http://localhost:5000/api/university/upload', {
+            const response = await api.post('/api/university/upload', {
                 studentName,
                 studentID: studentId,
                 courseName,

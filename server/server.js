@@ -13,6 +13,8 @@ const Certificate = require('./models/Certificate');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const FRONTEND_URL = process.env.FRONTEND_URL || 'https://blockcert.codewithaman.tech';
+const BACKEND_URL = process.env.BACKEND_URL || 'https://blockchain-certificate-system-backend.onrender.com';
 
 // 2. Middleware setup karein (sabse pehle)
 app.use(cors());
@@ -26,6 +28,22 @@ mongoose.connect(process.env.MONGO_URI)
 // 4. Routes define karein (middleware ke baad)
 app.get('/', (req, res) => {
     res.send('API is running...');
+});
+
+// Lightweight redirector so QR codes can always resolve correctly
+// Example: GET /qr/verify?certificateId=123 -> 302 to `${FRONTEND_URL}/verify?certificateId=123`
+app.get('/qr/verify', (req, res) => {
+    try {
+        const { certificateId } = req.query;
+        if (!certificateId) {
+            return res.status(400).send('certificateId is required');
+        }
+        const target = `${FRONTEND_URL}/verify?certificateId=${encodeURIComponent(certificateId)}`;
+        return res.redirect(302, target);
+    } catch (e) {
+        console.error('QR redirect error:', e);
+        return res.status(500).send('Server error');
+    }
 });
 
 // --- UNIVERSITY ROUTE (Upload) ---
@@ -59,8 +77,9 @@ app.post('/api/university/upload', async (req, res) => {
         });
         await newCertificate.save();
 
-        // QR code generate karein
-    const verificationUrl = 'https://blockcert.codewithaman.tech/verify?certificateId=' + certificateId.toString();
+    // QR code generate karein
+    // Point QR to backend redirector so target can be changed centrally without reissuing codes
+    const verificationUrl = `${BACKEND_URL}/qr/verify?certificateId=${certificateId.toString()}`;
         const qrCodeDataUrl = await qrcode.toDataURL(verificationUrl);
 
         res.status(200).json({
