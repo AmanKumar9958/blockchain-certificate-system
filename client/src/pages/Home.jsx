@@ -4,11 +4,11 @@ import HomeMidSec from '../components/HomeMidSec';
 
 const Home = () => {
     return (
-        <>
+        <div>
             <Hero />
             <HomeMidSec />
             <HomeBotSec />
-        </>
+        </div>
     );
 }
 

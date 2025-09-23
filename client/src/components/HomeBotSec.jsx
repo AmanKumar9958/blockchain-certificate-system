@@ -46,8 +46,8 @@ const HomeBotSec = () => {
         <section ref={ref} className={`w-[92%] max-w-[1200px] mx-auto py-20 transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="relative rounded-2xl bg-gradient-to-r from-cyan-500/10 via-slate-800/10 to-blue-500/10 border border-slate-700 p-10 md:p-16 overflow-hidden">
                 <div aria-hidden className="absolute inset-0 -z-10">
-                   <div className="absolute top-0 left-0 w-60 h-60 bg-cyan-500/20 blur-3xl"></div>
-                   <div className="absolute bottom-0 right-0 w-60 h-60 bg-blue-500/20 blur-3xl"></div>
+                    <div className="absolute top-0 left-0 w-60 h-60 bg-cyan-500/20 blur-3xl"></div>
+                    <div className="absolute bottom-0 right-0 w-60 h-60 bg-blue-500/20 blur-3xl"></div>
                 </div>
                 <div className="text-center">
                     <h2 className="font-extrabold text-3xl md:text-4xl tracking-tighter">

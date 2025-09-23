@@ -30,7 +30,7 @@ const Navbar = () => {
                             to="/university"
                             className={({ isActive }) => `${baseLink} ${isActive ? activeLink : outlineLink}`}
                         >
-                            University Login
+                            Upload Certificate
                         </NavLink>
                     </div>
 
@@ -64,7 +64,7 @@ const Navbar = () => {
                                 onClick={() => setOpen(false)}
                                 className={({ isActive }) => `${baseLink} ${isActive ? activeLink : outlineLink}`}
                             >
-                                University Login
+                                Upload Certificate
                             </NavLink>
                         </div>
                     </div>

@@ -31,7 +31,7 @@ const Hero = () => {
                                 Verify Certificate
                             </Link>
                             <Link to="/university" className="inline-block px-8 py-3 rounded-full bg-slate-700/50 text-white font-semibold transform hover:bg-slate-700 hover:scale-105 transition-all">
-                                University Login
+                                Upload Certificate
                             </Link>
                     </div>
                 </div>

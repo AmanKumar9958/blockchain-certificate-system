@@ -5,6 +5,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const crypto = require('crypto'); // Hashing ke liye
+const qrcode = require('qrcode');
 
 // blockchain aur database models
 const { addCertificate, getCertificateHash } = require('./utils/blockchain');
@@ -58,9 +59,14 @@ app.post('/api/university/upload', async (req, res) => {
         });
         await newCertificate.save();
 
+        // QR code generate karein
+    const verificationUrl = 'https://blockcert.codewithaman.tech/verify?certificateId=' + certificateId.toString();
+        const qrCodeDataUrl = await qrcode.toDataURL(verificationUrl);
+
         res.status(200).json({
             message: "Certificate uploaded successfully",
-            certificateId: certificateId.toString()
+            certificateId: certificateId.toString(),
+            qrCodeDataUrl,
         });
 
     } catch (error) {
